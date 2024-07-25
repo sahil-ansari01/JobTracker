@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Application Tracker</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-gray-50">
+    <header class="bg-white shadow-md py-4">
+        <div class="container mx-auto flex justify-between items-center px-4">
+            <div class="text-2xl font-bold text-gray-900">Job Application Tracker</div>
+            <nav class="space-x-4">
+                <a href="#" class="text-gray-700">AI Resume Builder</a>
+                <a href="#" class="text-gray-700">Job Application Tracker</a>
+                <a href="#" class="text-gray-700">Tools</a>
+                <a href="#" class="text-gray-700">More</a>
+            </nav>
+            <div class="space-x-4">
+                <button class="bg-yellow-500 text-white px-4 py-2 rounded">Sign up</button>
+                <button class="bg-white text-black border border-black px-4 py-2 rounded">Log in</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-16">
+        <div class="text-center">
+            <h1 class="text-5xl font-bold text-gray-900 mb-4">Better Resume. Faster Search. More Offers.</h1>
+            <p class="text-xl text-gray-700 mb-8">Simplify your job search and land your next position sooner with our all-in-one suite of tools.</p>
+            <div class="space-x-4">
+                <button class="bg-yellow-500 text-white px-8 py-3 rounded">Sign Up! - It's 100% Free!</button>
+                <button class="bg-white text-black border border-black px-8 py-3 rounded">Watch a Demo</button>
+            </div>
+        </div>
+
+        <section class="mt-16">
+            <!-- Example section for showing features -->
+            <div class="grid grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h2 class="text-xl font-semibold text-gray-900">AI Resume Builder</h2>
+                    <p class="text-gray-700 mt-2">Create a professional resume using AI.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h2 class="text-xl font-semibold text-gray-900">Job Tracker</h2>
+                    <p class="text-gray-700 mt-2">Keep track of all your job applications.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h2 class="text-xl font-semibold text-gray-900">Matching Mode</h2>
+                    <p class="text-gray-700 mt-2">Find the best job matches for your skills.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-100 py-6 mt-16">
+        <div class="container mx-auto text-center text-gray-700">
+            &copy; 2024 Job Application Tracker. All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Event listeners for buttons
+            document.querySelector('.bg-yellow-500').addEventListener('click', () => {
+                window.location.href = 'register.html';
+            });
+            document.querySelector('.bg-white').addEventListener('click', () => {
+                window.location.href = 'login.html';
+            });
+        });
+    </script>
+</body>
+</html>
