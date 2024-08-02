@@ -4,6 +4,6 @@ const { authenticate } = require('../middleware/authMiddleware');
 const router = express.Router();
 
 router.get('/', profile);
-router.put('/', authenticate, updateProfile);
+router.post('/:userId', updateProfile);
 
 module.exports = router;

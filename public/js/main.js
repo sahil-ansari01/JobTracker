@@ -1,3 +1,7 @@
+const token = localStorage.getItem('token');
+const decodedToken = jwt_decode(token);
+const userId = decodedToken.userId
+
 document.addEventListener('DOMContentLoaded', () => {
 
     // Set up event listeners for profile update
@@ -72,15 +76,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Function to handle profile update
 async function updateProfile(name, email, careerGoals) {
-    const token = localStorage.getItem('token');
     try {
-        await axios.post('/profile', { name, email, career_goals: careerGoals }, {
+        const response = await axios.post(`/profile/${userId}`, { name, email, careerGoals }, {
             headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
             }
         });
-        alert('Profile updated successfully');
+        if (response.data.success) {
+            alert('Profile updated successfully');
+        } else {
+            alert('Profile update failed!')
+        }
+        
     } catch (error) {
         console.error('Error updating profile:', error);
         alert('Profile update failed');
