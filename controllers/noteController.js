@@ -1,4 +1,13 @@
 const { Note } = require('../models/note');
+const path = require('path')
+
+exports.notes = async(req, res) => {
+  try {
+    res.sendFile(path.join(__dirname, '..', 'public', 'dashboard', 'notes.html'))
+  } catch (err) {
+    console.log(err);
+  }
+}
 
 exports.createNote = async (req, res) => {
   const { userId } = req.user;

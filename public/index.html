@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Job Application Tracker</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/styles.css">
+    <link href="./css/style.css" rel="stylesheet">
 </head>
 <body class="bg-gray-50">
     <header class="bg-white shadow-md py-4">
@@ -15,11 +15,11 @@
                 <a href="#" class="text-gray-700">AI Resume Builder</a>
                 <a href="#" class="text-gray-700">Job Application Tracker</a>
                 <a href="#" class="text-gray-700">Tools</a>
-                <a href="#" class="text-gray-700">More</a>
+                <a href="/about" class="text-gray-700">More</a>
             </nav>
             <div class="space-x-4">
-                <button class="bg-yellow-500 text-white px-4 py-2 rounded">Sign up</button>
-                <button class="bg-white text-black border border-black px-4 py-2 rounded">Log in</button>
+                <button class="bg-yellow-500 text-white px-4 py-2 rounded" id="signup">Sign up</button>
+                <button class="bg-white text-black border border-black px-4 py-2 rounded" id="login">Log in</button>
             </div>
         </div>
     </header>
@@ -62,11 +62,11 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             // Event listeners for buttons
-            document.querySelector('.bg-yellow-500').addEventListener('click', () => {
-                window.location.href = 'register.html';
+            document.getElementById('signup').addEventListener('click', () => {
+                window.location.href = '/auth/signup';
             });
-            document.querySelector('.bg-white').addEventListener('click', () => {
-                window.location.href = 'login.html';
+            document.getElementById('login').addEventListener('click', () => {
+                window.location.href = '/auth/login';
             });
         });
     </script>

@@ -1,4 +1,13 @@
 const { JobApplication } = require('../models/jobApplication');
+const path = require('path')
+
+exports.jobApplications = async (req, res) => {
+  try {
+    res.sendFile(path.join(__dirname, '..', 'public', 'dashboard', 'applications.html'))
+  } catch (err) {
+    console.log(err);
+  }
+}
 
 exports.createJobApplication = async (req, res) => {
   const { userId } = req.user;

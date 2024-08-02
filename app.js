@@ -2,21 +2,46 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const path = require('path');
+const bodyParser = require('body-parser');
 
 dotenv.config();
 
-const { sequelize, User, Profile, JobApplication, Reminder, Company, Note } = require('./models');
+const sequelize = require('./utils/database');
+const Profile = require('./models/profile');
+const JobApplication = require('./models/jobApplication');
+const Reminder = require('./models/reminder');
+const Company = require('./models/company');
+const Note = require('./models/note');
+const User = require('./models/user');
 
+console.log(User);
 const app = express();
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(cors());
 app.use(express.json());
 
+// Middleware to serve static files
+app.use('/auth/css', express.static(path.join(__dirname, 'public/css')));
+app.use('/auth/js', express.static(path.join(__dirname, 'public/js')));
+
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use('/jobtracker', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'))
+})
+
+app.use('/about', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'about.html'))
+})
+
 app.use('/auth', require('./routes/authRoutes'));
+app.use('/home', require('./routes/homeRoutes.js'))
 app.use('/profile', require('./routes/profileRoutes'));
-app.use('/jobApplications', require('./routes/jobApplicationRoutes'));
+app.use('/progress', require('./routes/progressRoutes'));
+app.use('/applications', require('./routes/jobApplicationRoutes'));
 app.use('/reminders', require('./routes/reminderRoutes'));
 app.use('/companies', require('./routes/companyRoutes'));
 app.use('/search', require('./routes/searchRoutes'));
@@ -70,7 +95,7 @@ User.hasMany(Company, {
 });
 
 // Sync database and start server
-sequelize.sync({ force: true }).then(() => {
+sequelize.sync().then(() => {
   app.listen(PORT, async () => {
     console.log(`Server running on port ${PORT}`);
     console.log(`Database URL: ${process.env.DB_HOST}`);

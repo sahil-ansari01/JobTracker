@@ -1,5 +1,14 @@
 const { Reminder } = require('../models/reminder');
 const { sendEmail } = require('../utils/emailService');
+const path = require('path')
+
+exports.reminders = async(req, res) => {
+  try {
+    res.sendFile(path.join(__dirname, '..', 'public', 'dashboard', 'reminders.html'))
+  } catch (err) {
+    console.log(err);
+  }
+}
 
 exports.createReminder = async (req, res) => {
   const { userId } = req.user;

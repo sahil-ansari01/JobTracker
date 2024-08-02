@@ -1,26 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Set up event listeners for login
-    const loginForm = document.getElementById('login-form');
-    if (loginForm) {
-        loginForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const email = document.getElementById('login-email').value;
-            const password = document.getElementById('login-password').value;
-            loginUser(email, password);
-        });
-    }
-
-    // Set up event listeners for registration
-    const registerForm = document.getElementById('signup-form');
-    if (registerForm) {
-        registerForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            registerUser(name, email, password);
-        });
-    }
 
     // Set up event listeners for profile update
     const updateProfileForm = document.getElementById('update-profile-form');
@@ -91,41 +69,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
-
-// Function to handle user authentication
-async function loginUser(email, password) {
-    try {
-        const response = await axios.post('/login', { email, password });
-        const data = response.data;
-        if (data.token) {
-            localStorage.setItem('token', data.token);
-            window.location.href = '/dashboard/index.html';
-        } else {
-            alert('Login failed');
-        }
-    } catch (error) {
-        console.error('Error during login:', error);
-        alert('Login failed');
-    }
-}
-
-// Function to handle user registration
-async function registerUser(name, email, password) {
-    try {
-        const response = await axios.post('/auth/signup', { name, email, password });
-        console.log(response);
-        const data = response.data;
-        if (data.token) {
-            localStorage.setItem('token', data.token);
-            window.location.href = '/dashboard/index.html';
-        } else {
-            alert('Registration failed');
-        }
-    } catch (error) {
-        console.error('Error during registration:', error);
-        alert('Registration failed');
-    }
-}
 
 // Function to handle profile update
 async function updateProfile(name, email, careerGoals) {
