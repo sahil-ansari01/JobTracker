@@ -1,10 +1,16 @@
 const token = localStorage.getItem('token');
+if (!token) {
+    alert('You need to log in first');
+    window.location.href = '/login'; 
+    return;
+}
+
 const decodedToken = jwt_decode(token);
-const userId = decodedToken.userId
+const userId = decodedToken.userId;
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    // Set up event listeners for profile update
+    // Profile update form
     const updateProfileForm = document.getElementById('update-profile-form');
     if (updateProfileForm) {
         updateProfileForm.addEventListener('submit', (e) => {
@@ -16,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Set up event listeners for job application logging
+    // Job application form
     const jobApplicationForm = document.getElementById('job-application-form');
     if (jobApplicationForm) {
         jobApplicationForm.addEventListener('submit', (e) => {
@@ -25,51 +31,51 @@ document.addEventListener('DOMContentLoaded', () => {
             const jobTitle = document.getElementById('job-title').value;
             const applicationDate = document.getElementById('application-date').value;
             const document = document.getElementById('document').files[0];
-            logJobApplication(companyName, jobTitle, applicationDate, document);
+            logJobApplication(companyName, jobTitle, applicationDate, document, token);
         });
     }
 
-    // Set up event listeners for setting reminders
+    // Reminder form
     const reminderForm = document.getElementById('reminder-form');
     if (reminderForm) {
         reminderForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const reminderText = document.getElementById('reminder-text').value;
             const reminderDate = document.getElementById('reminder-date').value;
-            setReminder(reminderText, reminderDate);
+            setReminder(reminderText, reminderDate, token);
         });
     }
 
-    // Set up event listeners for adding company information
+    // Company information form
     const companyForm = document.getElementById('company-form');
     if (companyForm) {
         companyForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const companyName = document.getElementById('company-name-info').value;
             const companyInfo = document.getElementById('company-info').value;
-            addCompanyInformation(companyName, companyInfo);
+            addCompanyInformation(companyName, companyInfo, token);
         });
     }
 
-    // Set up event listeners for adding notes to job applications
+    // Note form
     const noteForm = document.getElementById('note-form');
     if (noteForm) {
         noteForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const applicationId = document.getElementById('application-id').value;
             const noteText = document.getElementById('note-text').value;
-            addNoteToApplication(applicationId, noteText);
+            addNoteToApplication(applicationId, noteText, token);
         });
     }
 
-    // Set up event listeners for searching and filtering job applications
+    // Search form
     const searchForm = document.getElementById('search-form');
     if (searchForm) {
         searchForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const searchTerm = document.getElementById('search-term').value;
             const filterStatus = document.getElementById('filter-status').value;
-            searchAndFilterApplications(searchTerm, filterStatus);
+            searchAndFilterApplications(searchTerm, filterStatus, token);
         });
     }
 });
@@ -79,16 +85,15 @@ async function updateProfile(name, email, careerGoals) {
     try {
         const response = await axios.post(`/profile/${userId}`, { name, email, careerGoals }, {
             headers: {
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json'
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
             }
         });
         if (response.data.success) {
             alert('Profile updated successfully');
         } else {
-            alert('Profile update failed!')
+            alert('Profile update failed');
         }
-        
     } catch (error) {
         console.error('Error updating profile:', error);
         alert('Profile update failed');
@@ -96,8 +101,7 @@ async function updateProfile(name, email, careerGoals) {
 }
 
 // Function to handle job application logging
-async function logJobApplication(companyName, jobTitle, applicationDate, document) {
-    const token = localStorage.getItem('token');
+async function logJobApplication(companyName, jobTitle, applicationDate, document, token) {
     const formData = new FormData();
     formData.append('company_name', companyName);
     formData.append('job_title', jobTitle);
@@ -120,8 +124,7 @@ async function logJobApplication(companyName, jobTitle, applicationDate, documen
 }
 
 // Function to handle setting reminders
-async function setReminder(reminderText, reminderDate) {
-    const token = localStorage.getItem('token');
+async function setReminder(reminderText, reminderDate, token) {
     try {
         await axios.post('/reminders', { reminder_text: reminderText, reminder_date: reminderDate }, {
             headers: {
@@ -137,8 +140,7 @@ async function setReminder(reminderText, reminderDate) {
 }
 
 // Function to handle adding company information
-async function addCompanyInformation(companyName, companyInfo) {
-    const token = localStorage.getItem('token');
+async function addCompanyInformation(companyName, companyInfo, token) {
     try {
         await axios.post('/companies', { company_name: companyName, company_info: companyInfo }, {
             headers: {
@@ -154,8 +156,7 @@ async function addCompanyInformation(companyName, companyInfo) {
 }
 
 // Function to handle adding notes to job applications
-async function addNoteToApplication(applicationId, noteText) {
-    const token = localStorage.getItem('token');
+async function addNoteToApplication(applicationId, noteText, token) {
     try {
         await axios.post('/notes', { application_id: applicationId, note_text: noteText }, {
             headers: {
@@ -171,8 +172,7 @@ async function addNoteToApplication(applicationId, noteText) {
 }
 
 // Function to handle searching and filtering job applications
-async function searchAndFilterApplications(searchTerm, filterStatus) {
-    const token = localStorage.getItem('token');
+async function searchAndFilterApplications(searchTerm, filterStatus, token) {
     try {
         const response = await axios.get('/search', {
             params: { search_term: searchTerm, filter_status: filterStatus },

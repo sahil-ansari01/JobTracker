@@ -2,21 +2,29 @@ const { DataTypes } = require('sequelize');
 const sequelize = require('../utils/database');
 
 const JobApplication = sequelize.define('JobApplication', {
-  position: {
+  companyName: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: false
   },
-  company: {
+  jobTitle: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: false
+  },
+  applicationData: {
+    type: DataTypes.DATE,
+    allowNull: false
   },
   status: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: false
   },
-  attachment: {
+  notes: {
     type: DataTypes.STRING,
-    allowNull: true,
+    allowNull: true
+  },
+  document: {
+    type: DataTypes.STRING,
+    allowNull: true
   },
 });
 

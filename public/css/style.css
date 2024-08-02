@@ -217,3 +217,15 @@ main {
 .hover\:bg-blue-600:hover {
     background-color: #2563EB;
 }
+
+.status-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.status-item {
+    flex: 1;
+    text-align: center;
+    margin: 0 10px;
+}

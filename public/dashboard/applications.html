@@ -3,19 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Applications</title>
-    <link href="../css/style.css" rel="stylesheet">
+    <title>Job Application Tracker</title>
+    <link rel="stylesheet" href="../css/style.css">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
 </head>
-<body class="bg-gray-50">
+<body class="bg-gray-100">
     <header class="bg-white shadow-md py-4">
         <div class="container mx-auto flex justify-between items-center px-4">
             <a href="/" class="text-2xl font-bold text-gray-900">Job Application Tracker</a>
             <nav class="space-x-4">
                 <a href="home" class="text-gray-700">Dashboard</a>
                 <a href="profile" class="text-gray-700">Profile</a>
+                <a href="applications" class="text-gray-700">Companies</a>
                 <a href="reminders" class="text-gray-700">Reminders</a>
-                <a href="companies" class="text-gray-700">Companies</a>
                 <a href="progress" class="text-gray-700">Progress</a>
                 <a href="search" class="text-gray-700">Search</a>
                 <a href="notes" class="text-gray-700">Notes</a>
@@ -26,18 +27,266 @@
         </div>
     </header>
 
-    <main class="container mx-auto px-4 py-16">
-        <h1 class="text-3xl font-bold text-gray-900 mb-6">Applications</h1>
-        <!-- Add job application logging functionality here -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Application Status Section -->
+        <section id="status-section" class="mb-8">
+            <!-- Status counts will be dynamically inserted here -->
+        </section>
+
+        <!-- Control Panel Section -->
+        <section class="mb-8">
+            <div class="flex justify-between items-center mb-4">
+                <div class="flex items-center">
+                    <input type="checkbox" id="select-all" class="mr-2">
+                    <label id="selected-count" for="select-all">0 selected</label>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <select id="group-by" class="border rounded px-2 py-1">
+                        <option value="status">Group by: Status</option>
+                        <option value="company">Group by: Company</option>
+                        <option value="none">No Grouping</option>
+                    </select>
+                    <button id="columns-btn" class="border rounded px-4 py-1">Columns</button>
+                    <button id="menu-btn" class="border rounded px-4 py-1">
+                        <i class="fas fa-bars mr-2"></i>Menu
+                    </button>
+                    <button id="add-job-btn" class="bg-green-600 text-white rounded px-4 py-1">
+                        <i class="fas fa-plus mr-2"></i>Add a New Job
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Job Applications Table Section -->
+        <section>
+            <table id="jobs-table" class="w-full bg-white rounded-lg shadow-md">
+                <thead>
+                    <tr class="bg-gray-100">
+                        <th class="px-4 py-2 text-left">Job Position</th>
+                        <th class="px-4 py-2 text-left">Company</th>
+                        <th class="px-4 py-2 text-left">Max. Salary</th>
+                        <th class="px-4 py-2 text-left">Location</th>
+                        <th class="px-4 py-2 text-left">Status</th>
+                        <th class="px-4 py-2 text-left">Date Saved</th>
+                        <th class="px-4 py-2 text-left">Date Applied</th>
+                        <th class="px-4 py-2 text-left">Follow up</th>
+                        <th class="px-4 py-2 text-left">Excitement</th>
+                    </tr>
+                </thead>
+                <tbody id="jobs-body">
+                    <!-- Job entries will be dynamically inserted here -->
+                </tbody>
+            </table>
+        </section>
     </main>
 
-    <footer class="bg-gray-100 py-6 mt-16">
-        <div class="container mx-auto text-center text-gray-700">
+    <footer class="bg-gray-200 py-4 mt-8">
+        <div class="container mx-auto text-center text-gray-600">
             &copy; 2024 Job Application Tracker. All rights reserved.
         </div>
     </footer>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js">
-    </script><script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
-    <script src="../js/main.js"></script>
+
+    <!-- Add Job Modal -->
+    <div id="add-job-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden">
+        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+            <div class="mt-3 text-center">
+                <h3 class="text-lg leading-6 font-medium text-gray-900">Add New Job</h3>
+                <div class="mt-2 px-7 py-3">
+                    <form id="add-job-form">
+                        <input type="text" id="job-title" placeholder="Job Title" class="mt-2 px-3 py-2 border rounded w-full" required>
+                        <input type="text" id="company" placeholder="Company" class="mt-2 px-3 py-2 border rounded w-full" required>
+                        <input type="number" id="salary" placeholder="Max Salary" class="mt-2 px-3 py-2 border rounded w-full">
+                        <input type="text" id="location" placeholder="Location" class="mt-2 px-3 py-2 border rounded w-full">
+                        <select id="job-status" class="mt-2 px-3 py-2 border rounded w-full">
+                            <option value="bookmarked">Bookmarked</option>
+                            <option value="applied">Applied</option>
+                            <option value="interviewing">Interviewing</option>
+                            <option value="negotiating">Negotiating</option>
+                            <option value="accepted">Accepted</option>
+                        </select>
+                        <button type="submit" class="mt-4 bg-blue-500 text-white py-2 px-4 rounded">Add Job</button>
+                        <button type="button" id="close-modal-btn" class="mt-4 bg-gray-500 text-white py-2 px-4 rounded">Close</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Fetch job data from an API
+        async function fetchJobs() {
+            try {
+                const response = await fetch('/api/jobs'); // Replace with your API endpoint
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('Error fetching jobs:', error);
+                return [];
+            }
+        }
+
+        // DOM elements
+        const statusSection = document.getElementById('status-section');
+        const selectAllCheckbox = document.getElementById('select-all');
+        const selectedCountLabel = document.getElementById('selected-count');
+        const groupBySelect = document.getElementById('group-by');
+        const jobsTable = document.getElementById('jobs-table');
+        const jobsBody = document.getElementById('jobs-body');
+        const addJobBtn = document.getElementById('add-job-btn');
+        const addJobModal = document.getElementById('add-job-modal');
+        const addJobForm = document.getElementById('add-job-form');
+        const closeModalBtn = document.getElementById('close-modal-btn');
+
+        let jobs = [];
+
+        async function initialize() {
+            jobs = await fetchJobs();
+            updateStatusCounts();
+            renderJobs();
+        }
+
+        // Update status counts
+        function updateStatusCounts() {
+            const counts = jobs.reduce((acc, job) => {
+                acc[job.status] = (acc[job.status] || 0) + 1;
+                return acc;
+            }, {});
+
+            const statuses = ['Bookmarked', 'Applied', 'Interviewing', 'Negotiating', 'Accepted'];
+            statusSection.innerHTML = `
+                <div class="status-container">
+                    ${statuses.map(status => `
+                        <div class="status-item">
+                            <h3 class="font-bold">${counts[status] || '0'}</h3>
+                            <p>${status}</p>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        // Render job table
+        function renderJobs() {
+            const grouping = groupBySelect.value;
+            let groupedJobs = jobs;
+
+            if (grouping !== 'none') {
+                groupedJobs = jobs.reduce((acc, job) => {
+                    const key = job[grouping];
+                    if (!acc[key]) {
+                        acc[key] = [];
+                    }
+                    acc[key].push(job);
+                    return acc;
+                }, {});
+            }
+
+            jobsBody.innerHTML = '';
+
+            if (grouping === 'none') {
+                groupedJobs.forEach(job => addJobRow(job));
+            } else {
+                for (const [group, groupJobs] of Object.entries(groupedJobs)) {
+                    const groupRow = document.createElement('tr');
+                    groupRow.innerHTML = `<td colspan="9" class="px-4 py-2 font-bold bg-gray-50">${group} (${groupJobs.length} job${groupJobs.length > 1 ? 's' : ''})</td>`;
+                    jobsBody.appendChild(groupRow);
+                    groupJobs.forEach(job => addJobRow(job));
+                }
+            }
+        }
+
+        // Add a single job row
+        function addJobRow(job) {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td class="px-4 py-2">
+                    <input type="checkbox" class="job-checkbox mr-2" data-id="${job.id}">
+                    ${job.title}
+                </td>
+                <td class="px-4 py-2">${job.company}</td>
+                <td class="px-4 py-2">$${job.salary.toLocaleString()}</td>
+                <td class="px-4 py-2">${job.location}</td>
+                <td class="px-4 py-2">${job.status}</td>
+                <td class="px-4 py-2">${job.dateSaved}</td>
+                <td class="px-4 py-2">${job.dateApplied}</td>
+                <td class="px-4 py-2">
+                    <span class="bg-yellow-200 px-2 py-1 rounded">${job.followUp}</span>
+                </td>
+                <td class="px-4 py-2">
+                    <span class="text-yellow-500">${'★'.repeat(job.excitement)}${'☆'.repeat(5 - job.excitement)}</span>
+                </td>
+            `;
+            jobsBody.appendChild(row);
+        }
+
+        // Update selected count
+        function updateSelectedCount() {
+            const selectedCount = document.querySelectorAll('.job-checkbox:checked').length;
+            selectedCountLabel.textContent = `${selectedCount} selected`;
+        }
+
+        // Event Listeners
+        selectAllCheckbox.addEventListener('change', () => {
+            document.querySelectorAll('.job-checkbox').forEach(checkbox => {
+                checkbox.checked = selectAllCheckbox.checked;
+            });
+            updateSelectedCount();
+        });
+
+        jobsBody.addEventListener('change', (e) => {
+            if (e.target.classList.contains('job-checkbox')) {
+                updateSelectedCount();
+            }
+        });
+
+        groupBySelect.addEventListener('change', renderJobs);
+
+        addJobBtn.addEventListener('click', () => {
+            addJobModal.classList.remove('hidden');
+        });
+
+        closeModalBtn.addEventListener('click', () => {
+            addJobModal.classList.add('hidden');
+        });
+
+        addJobForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const newJob = {
+                title: document.getElementById('job-title').value,
+                company: document.getElementById('company').value,
+                salary: parseFloat(document.getElementById('salary').value) || 0,
+                location: document.getElementById('location').value,
+                status: document.getElementById('job-status').value,
+                dateSaved: new Date().toISOString().split('T')[0],
+                dateApplied: new Date().toISOString().split('T')[0],
+                followUp: new Date().toISOString().split('T')[0],
+                excitement: 3 // Default excitement level
+            };
+
+            try {
+                const response = await fetch('/api/jobs', { // Replace with your API endpoint
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(newJob)
+                });
+                if (response.ok) {
+                    const addedJob = await response.json();
+                    jobs.push(addedJob);
+                    addJobModal.classList.add('hidden');
+                    updateStatusCounts();
+                    renderJobs();
+                } else {
+                    console.error('Failed to add job');
+                }
+            } catch (error) {
+                console.error('Error adding job:', error);
+            }
+        });
+
+        // Initial render
+        initialize();
+    </script>
 </body>
 </html>
