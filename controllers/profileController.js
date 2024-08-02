@@ -1,4 +1,13 @@
 const { Profile } = require('../models/profile');
+const path = require('path')
+
+exports.profile = async (req, res) => {
+  try {
+    res.sendFile(path.join(__dirname, '..', 'public', 'dashboard', 'profile.html'))
+  } catch (err) {
+    console.log(err);
+  }
+}
 
 exports.updateProfile = async (req, res) => {
   const { userId } = req.user;

@@ -1,4 +1,13 @@
 const { Company } = require('../models/company');
+const path = require('path')
+
+exports.companies = async(req, res) => {
+  try {
+    res.sendFile(path.join(__dirname, '..', 'public', 'dashboard', 'companies.html'))
+  } catch (err) {
+    console.log(err);
+  }
+}
 
 exports.createCompany = async (req, res) => {
   const { userId } = req.user;

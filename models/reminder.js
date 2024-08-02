@@ -1,14 +1,15 @@
-module.exports = (sequelize, DataTypes) => {
-  const Reminder = sequelize.define('Reminder', {
-    message: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    date: {
-      type: DataTypes.DATE,
-      allowNull: false,
-    },
-  });
+const { DataTypes } = require('sequelize');
+const sequelize = require('../utils/database');
 
-  return Reminder;
-};
+const Reminder = sequelize.define('Reminder', {
+  message: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  date: {
+    type: DataTypes.DATE,
+    allowNull: false,
+  },
+});
+
+module.exports = Reminder;
